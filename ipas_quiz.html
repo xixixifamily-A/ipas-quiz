@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPAS 中級AI應用規劃師 - 學習測驗系統</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', 'Microsoft YaHei', 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%); min-height: 100vh; color: #2d3748; }
+
+/* ===== Container ===== */
+.container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+/* ===== Header ===== */
+.header { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 24px; text-align: center; box-shadow: 0 4px 15px rgba(26,54,93,0.3); }
+.header h1 { font-size: 28px; margin-bottom: 6px; letter-spacing: 1px; }
+.header p { font-size: 14px; opacity: 0.85; }
+.header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; margin-top: 10px; }
+
+/* ===== Settings Panel ===== */
+.settings-panel { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.settings-panel h2 { font-size: 18px; color: #1a365d; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.settings-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 768px) { .settings-row { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .settings-row { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 4px; }
+.form-group select, .form-group input { padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; background: #f7fafc; transition: border-color 0.2s; }
+.form-group select:focus, .form-group input:focus { outline: none; border-color: #2b6cb0; background: white; }
+.btn-start { background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%); color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; letter-spacing: 1px; }
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(43,108,176,0.4); }
+.btn-start:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ===== Quiz Area ===== */
+.quiz-area { display: none; }
+.quiz-header { background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.quiz-header .progress { font-size: 15px; font-weight: 600; color: #1a365d; }
+.quiz-header .timer { font-size: 14px; color: #4a5568; }
+.progress-bar { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, #2b6cb0, #63b3ed); border-radius: 3px; transition: width 0.4s; }
+
+/* ===== Question Card ===== */
+.q-card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.q-number { display: inline-block; background: #ebf8ff; color: #2b6cb0; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.q-text { font-size: 17px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; }
+.q-options { display: flex; flex-direction: column; gap: 10px; }
+.q-option { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+.q-option:hover { border-color: #63b3ed; background: #ebf8ff; }
+.q-option.selected { border-color: #2b6cb0; background: #ebf8ff; }
+.q-option .radio { width: 20px; height: 20px; border: 2px solid #cbd5e0; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.2s; }
+.q-option.selected .radio { border-color: #2b6cb0; }
+.q-option.selected .radio::after { content: ''; width: 10px; height: 10px; background: #2b6cb0; border-radius: 50%; }
+.q-option .opt-label { font-weight: 600; color: #2b6cb0; flex-shrink: 0; }
+.q-option .opt-text { flex: 1; line-height: 1.5; }
+
+/* ===== Difficulty Badge ===== */
+.diff-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; margin-left: 8px; }
+.diff-badge.base { background: #c6f6d5; color: #22543d; }
+.diff-badge.adv { background: #fefcbf; color: #744210; }
+.diff-badge.pro { background: #fed7d7; color: #742a2a; }
+
+/* ===== Navigation ===== */
+.nav-bar { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+.nav-btn { width: 38px; height: 38px; border: 2px solid #e2e8f0; border-radius: 8px; background: white; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: center; line-height: 34px; }
+.nav-btn:hover { border-color: #2b6cb0; color: #2b6cb0; }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nav-btn.active { background: #2b6cb0; color: white; border-color: #2b6cb0; }
+.nav-btn.answered { background: #ebf8ff; border-color: #2b6cb0; }
+.nav-btn.active.answered { background: #2b6cb0; border-color: #2b6cb0; }
+.btn-submit { background: #38a169; color: white; border: none; padding: 14px 40px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 16px; }
+.btn-submit:hover { background: #2f855a; transform: translateY(-2px); }
+
+/* ===== Result ===== */
+.result-area { display: none; }
+.result-header { background: white; border-radius: 12px; padding: 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.result-score { font-size: 64px; font-weight: 800; margin: 10px 0; }
+.result-score.good { color: #38a169; }
+.result-score.fair { color: #d69e2e; }
+.result-score.poor { color: #e53e3e; }
+.result-label { font-size: 18px; color: #4a5568; margin-bottom: 4px; }
+.result-detail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+@media (max-width: 480px) { .result-detail { grid-template-columns: 1fr; } }
+.stat-card { background: #f7fafc; border-radius: 8px; padding: 12px; }
+.stat-card .num { font-size: 24px; font-weight: 700; color: #2b6cb0; }
+.stat-card .lbl { font-size: 13px; color: #718096; }
+
+/* ===== Review ===== */
+.review-item { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.review-item.correct { border-left: 5px solid #38a169; }
+.review-item.wrong { border-left: 5px solid #e53e3e; }
+.review-status { display: inline-block; padding: 2px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.review-status.correct { background: #c6f6d5; color: #22543d; }
+.review-status.wrong { background: #fed7d7; color: #742a2a; }
+.review-q { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.review-answer { font-size: 14px; color: #4a5568; margin-bottom: 8px; }
+.review-answer .your-ans { color: #e53e3e; font-weight: 600; }
+.review-answer .cor-ans { color: #38a169; font-weight: 600; }
+.r-key-point { background: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 10px 14px; margin: 8px 0; border-radius: 4px; font-size: 14px; }
+.r-analysis { background: #fffbeb; border-left: 4px solid #d69e2e; padding: 10px 14px; margin: 8px 0; border-radius: 4px; font-size: 14px; line-height: 1.6; }
+.btn-restart { background: #1a365d; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.2s; margin-top: 16px; }
+.btn-restart:hover { background: #2b6cb0; }
+
+/* ===== Loading ===== */
+.loading { text-align: center; padding: 40px; color: #4a5568; }
+.loading .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid #2b6cb0; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Info ===== */
+.info-note { background: #ebf8ff; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #2b6cb0; margin-bottom: 16px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>📘 IPAS 學習測驗系統</h1>
+        <p>中級AI應用規劃師 · <span id="headerSubject">科目1：人工智慧技術應用規劃</span></p>
+        <span class="badge">📍 參考 iPAS 學習指引 — 114年試題公告</span>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <h2>⚙️ 測驗設定</h2>
+        <div class="info-note" id="infoNote">
+            💡 科目1（9個子範圍 × 3難度 × 50題 = 1,350題）｜科目2（13個子範圍 × 3難度 × 50題 = 1,950題）｜科目3（12個子範圍 × 3難度 × 50題 = 1,800題）<br>
+            💡 每個範圍含 <strong>基礎 / 進階 / 專業</strong> 三種難度，選擇科目後範圍與題數自動更新
+        </div>
+        <div class="settings-row">
+            <div class="form-group">
+                <label for="numQuestions">📊 題目數量</label>
+                <select id="numQuestions">
+                    <option value="5">5 題</option>
+                    <option value="10">10 題</option>
+                    <option value="15" selected>15 題</option>
+                    <option value="20">20 題</option>
+                    <option value="25">25 題</option>
+                    <option value="30">30 題</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="subject">📚 科目</label>
+                <select id="subject" onchange="updateScopeOptions()">
+                    <option value="subject1">科目1：人工智慧技術應用規劃 (1,350題)</option>
+                    <option value="subject2">科目2：大數據處理分析與應用 (1,950題)</option>
+                    <option value="subject3">科目3：機器學習技術與應用 (1,800題)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="scope">🎯 出題範圍</label>
+                <select id="scope">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="difficulty">🎯 難度</label>
+                <select id="difficulty">
+                    <option value="all">全部難度</option>
+                    <option value="基礎">基礎</option>
+                    <option value="進階">進階</option>
+                    <option value="專業">專業</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-start" id="btnStart" onclick="startQuiz()">🚀 開始測驗</button>
+    </div>
+
+    <!-- Quiz Area -->
+    <div class="quiz-area" id="quizArea">
+        <div class="quiz-header">
+            <div>
+                <div class="progress" id="progressText">第 1 / 15 題</div>
+                <div class="progress-bar"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+            </div>
+            <div class="timer" id="timerDisplay">⏱ 00:00</div>
+        </div>
+
+        <div id="questionContainer"></div>
+
+        <div class="nav-bar" id="navBar"></div>
+
+        <div style="text-align: center;">
+            <button class="btn-submit" id="btnSubmit" onclick="submitQuiz()">📝 提交答案</button>
+        </div>
+    </div>
+
+    <!-- Result Area -->
+    <div class="result-area" id="resultArea">
+        <div class="result-header" id="resultHeader">
+            <div class="result-label">📋 測驗結果</div>
+            <div class="result-score" id="resultScore">0</div>
+            <div style="font-size: 20px; font-weight: 600;" id="resultGrade"></div>
+            <div class="result-detail">
+                <div class="stat-card"><div class="num" id="statCorrect">0</div><div class="lbl">✅ 答對</div></div>
+                <div class="stat-card"><div class="num" id="statWrong">0</div><div class="lbl">❌ 答錯</div></div>
+                <div class="stat-card"><div class="num" id="statRate">0%</div><div class="lbl">📊 正確率</div></div>
+            </div>
+        </div>
+        <h2 style="color: #1a365d; margin: 20px 0;">📖 逐題解析</h2>
+        <div id="reviewContainer"></div>
+        <div style="text-align: center; margin: 24px 0;">
+            <button class="btn-restart" onclick="resetQuiz()">🔄 再測一次</button>
+        </div>
+    </div>
+</div>
+
+<!-- Load question bank data from external JS files -->
+<script src="qbank_all_1350_data.js"></script>
+<script src="qbank_all_1950_data.js"></script>
+<script src="qbank_all_1800_data.js"></script>
+<script>
+// ============================================================
+// IPAS 學習測驗系統 - 核心邏輯
+// 科目1題庫：ALL_QBANKS (qbank_all_1350_data.js) - 1,350題
+// 科目2題庫：ALL_QBANKS_SUBJECT2 (qbank_all_1950_data.js) - 1,950題
+// 科目3題庫：ALL_QBANKS_SUBJECT3 (qbank_all_1800_data.js) - 1,800題
+// ============================================================
+
+// ===== Subject 1 scope config =====
+const SCOPE_CONFIG_1 = {
+    "3.1": "自然語言處理(NLP)", "3.2": "電腦視覺(CV)", "3.3": "生成式AI", "3.4": "多模態AI",
+    "4.1": "AI導入評估", "4.2": "AI導入規劃", "4.3": "AI風險管理",
+    "5.1": "數據準備與模型選擇", "5.2": "AI系統集成與部署"
+};
+
+// ===== Subject 2 scope config =====
+const SCOPE_CONFIG_2 = {
+    "3.1": "敘述性統計與資料摘要技術", "3.2": "機率分佈與資料分佈模型", "3.3": "假設檢定與統計推論",
+    "4.1": "數據收集與清理", "4.2": "數據儲存與管理", "4.3": "數據處理技術與工具",
+    "5.1": "統計學在大數據中的應用", "5.2": "常見的大數據分析方法", "5.3": "數據可視化工具",
+    "6.1": "大數據與機器學習", "6.2": "大數據在鑑別式AI中的應用",
+    "6.3": "大數據在生成式AI中的應用", "6.4": "大數據隱私保護、安全與合規"
+};
+
+// ===== Subject 3 scope config =====
+const SCOPE_CONFIG_3 = {
+    "3.1": "機率/統計之機器學習基礎應用", "3.2": "線性代數之機器學習基礎應用", "3.3": "數值優化技術與方法",
+    "4.1": "機器學習原理與技術", "4.2": "常見機器學習演算法", "4.3": "深度學習原理與框架",
+    "5.1": "數據準備與特徵工程", "5.2": "模型選擇與架構設計",
+    "5.3": "模型訓練、評估與驗證", "5.4": "模型調整與優化",
+    "6.1": "數據隱私、安全與合規", "6.2": "演算法偏見與公平性"
+};
+
+// ===== Count questions in a bank for a given subject =====
+function getBank(subject) {
+    if (subject === 'subject1') return ALL_QBANKS;
+    if (subject === 'subject2') return ALL_QBANKS_SUBJECT2;
+    return ALL_QBANKS_SUBJECT3;
+}
+
+function countQBank(subject) {
+    const bank = getBank(subject);
+    let total = 0;
+    for (const s in bank) {
+        for (const d in bank[s]) {
+            total += bank[s][d].length;
+        }
+    }
+    return total;
+}
+
+// ===== Count questions for a specific scope =====
+function countScope(subject, scope) {
+    const bank = getBank(subject);
+    const s = bank[scope];
+    if (!s) return 0;
+    let total = 0;
+    for (const d in s) {
+        total += s[d].length;
+    }
+    return total;
+}
+
+// ===== Get scope config for a subject =====
+function getScopeConfig(subject) {
+    if (subject === 'subject1') return SCOPE_CONFIG_1;
+    if (subject === 'subject2') return SCOPE_CONFIG_2;
+    return SCOPE_CONFIG_3;
+}
+
+// ===== Update scope dropdown options based on selected subject =====
+function updateScopeOptions() {
+    const subject = document.getElementById('subject').value;
+    const config = getScopeConfig(subject);
+    const totalQ = countQBank(subject);
+    const bank = getBank(subject);
+
+    const scopeSel = document.getElementById('scope');
+    scopeSel.innerHTML = '';
+
+    const optAll = document.createElement('option');
+    optAll.value = 'all';
+    optAll.textContent = `全部範圍 (${totalQ}題)`;
+    scopeSel.appendChild(optAll);
+
+    for (const key in config) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        const cnt = bank[key] ? countScope(subject, key) : 0;
+        opt.textContent = `${key} ${config[key]} (${cnt}題)`;
+        scopeSel.appendChild(opt);
+    }
+
+    // Update header
+    const headerEl = document.getElementById('headerSubject');
+    const subjectNames = {
+        'subject1': '科目1：人工智慧技術應用規劃',
+        'subject2': '科目2：大數據處理分析與應用',
+        'subject3': '科目3：機器學習技術與應用'
+    };
+    headerEl.textContent = subjectNames[subject] || '';
+
+    // Update info note
+    const infoEl = document.getElementById('infoNote');
+    const infoTexts = {
+        'subject1': `💡 科目1：共 9 個子範圍，每個範圍含 <strong>基礎 / 進階 / 專業</strong> 三種難度，各 50 題（每範圍 150 題），總題庫 ${totalQ} 題`,
+        'subject2': `💡 科目2：共 13 個子範圍，每個範圍含 <strong>基礎 / 進階 / 專業</strong> 三種難度，各 50 題（每範圍 150 題），總題庫 ${totalQ} 題`,
+        'subject3': `💡 科目3：共 12 個子範圍，每個範圍含 <strong>基礎 / 進階 / 專業</strong> 三種難度，各 50 題（每範圍 150 題），總題庫 ${totalQ} 題`
+    };
+    infoEl.innerHTML = infoTexts[subject] || '';
+}
+// ============================================================
+// IPAS 科目1 - 測驗核心邏輯
+// 題庫資料由 qbank_all_135_data.js 提供 (ALL_QBANKS)
+// ============================================================
+
+// ===== Function to get difficulty badge class =====
+
+// ===== State =====
+let state = {
+    questions: [],
+    currentIndex: 0,
+    answers: {},
+    timerInterval: null,
+    seconds: 0,
+    submitted: false,
+    scope: "all",
+    difficulty: "all"
+};
+
+// ===== Get questions by subject, scope and difficulty =====
+function getQuestions(subject, scope, difficulty, count) {
+    const BANK = getBank(subject);
+    let pool = [];
+    if (scope === "all") {
+        for (const s in BANK) {
+            if (difficulty === "all") {
+                for (const d in BANK[s]) {
+                    pool = pool.concat(BANK[s][d]);
+                }
+            } else {
+                pool = pool.concat(BANK[s][difficulty] || []);
+            }
+        }
+    } else {
+        const bank = BANK[scope];
+        if (!bank) return [];
+        if (difficulty === "all") {
+            for (const d in bank) {
+                pool = pool.concat(bank[d]);
+            }
+        } else {
+            pool = pool.concat(bank[difficulty] || []);
+        }
+    }
+    // Fisher-Yates shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, count);
+}
+
+// ===== Get difficulty badge class =====
+function getDiffBadge(diff) {
+    if (diff === "基礎") return 'base';
+    if (diff === "進階") return 'adv';
+    if (diff === "專業") return 'pro';
+    return '';
+}
+
+// ===== Start Quiz =====
+function startQuiz() {
+    const numQ = parseInt(document.getElementById('numQuestions').value);
+    const subject = document.getElementById('subject').value;
+    const scope = document.getElementById('scope').value;
+    const difficulty = document.getElementById('difficulty').value;
+
+    try {
+        const selected = getQuestions(subject, scope, difficulty, numQ);
+
+        if (selected.length === 0) {
+            alert('❌ 所選條件無符合的題目，請調整設定。');
+            return;
+        }
+
+        state.questions = selected;
+        state.currentIndex = 0;
+        state.answers = {};
+        state.submitted = false;
+        state.seconds = 0;
+        state.scope = scope;
+        state.difficulty = difficulty;
+
+        document.getElementById('settingsPanel').style.display = 'none';
+        document.getElementById('quizArea').style.display = 'block';
+        document.getElementById('resultArea').style.display = 'none';
+
+        if (state.timerInterval) clearInterval(state.timerInterval);
+        state.timerInterval = setInterval(() => {
+            state.seconds++;
+            document.getElementById('timerDisplay').textContent = '⏱ ' + formatTime(state.seconds);
+        }, 1000);
+
+        renderQuestion();
+        renderNav();
+    } catch (e) {
+        alert('❌ 題庫載入失敗：' + e.message);
+        console.error(e);
+    }
+}
+
+// ===== Render Question =====
+function renderQuestion() {
+    const container = document.getElementById('questionContainer');
+    const q = state.questions[state.currentIndex];
+    if (!q) return;
+
+    const total = state.questions.length;
+    const idx = state.currentIndex;
+    document.getElementById('progressText').innerHTML = `第 ${idx+1} / ${total} 題 &nbsp;|&nbsp; 已答 ${Object.keys(state.answers).length} 題`;
+    document.getElementById('progressFill').style.width = `${((idx+1)/total)*100}%`;
+
+    // Extract difficulty from question id (B=基礎, J=進階, Z=專業)
+    const diffLetter = q.id ? q.id.split('-')[1]?.[0] : '';
+    const diffMap = { 'B': '基礎', 'J': '進階', 'Z': '專業' };
+    const diffName = diffMap[diffLetter] || '';
+    const diffBadge = diffName ? `<span class="diff-badge ${getDiffBadge(diffName)}">${diffName}</span>` : '';
+
+    let html = `<div class="q-card">
+        <span class="q-number">#${idx+1} / ${total}</span>${diffBadge}
+        <div class="q-text">${q.question}</div>
+        <div class="q-options">`;
+
+    q.options.forEach((opt, oi) => {
+        const letter = String.fromCharCode(65 + oi);
+        const selected = state.answers[idx] === letter ? 'selected' : '';
+        const text = opt.replace(/^[A-D]\.\s*/, '');
+        html += `<div class="q-option ${selected}" onclick="selectOption(${idx}, '${letter}')">
+            <div class="radio"></div>
+            <span class="opt-label">${letter}.</span>
+            <span class="opt-text">${text}</span>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+    container.innerHTML = html;
+}
+
+// ===== Select Option =====
+function selectOption(qIdx, letter) {
+    if (state.submitted) return;
+    state.answers[qIdx] = letter;
+    renderQuestion();
+    renderNav();
+}
+
+// ===== Render Navigation =====
+function renderNav() {
+    const nav = document.getElementById('navBar');
+    const total = state.questions.length;
+    let html = '';
+
+    for (let i = 0; i < total; i++) {
+        let style = '';
+        if (state.answers[i]) style = ' style="background: #ebf8ff; border-color: #2b6cb0;"';
+        if (i === state.currentIndex) style = ' style="background: #2b6cb0; color: white; border-color: #2b6cb0;"';
+        html += `<button class="nav-btn" onclick="goToQuestion(${i})"${style}>${i+1}</button>`;
+    }
+
+    nav.innerHTML = html;
+}
+
+// ===== Go to Question =====
+function goToQuestion(idx) {
+    if (state.submitted) return;
+    state.currentIndex = idx;
+    renderQuestion();
+    renderNav();
+}
+
+// ===== Submit Quiz =====
+function submitQuiz() {
+    const total = state.questions.length;
+    const answered = Object.keys(state.answers).length;
+
+    if (answered < total) {
+        const confirm = window.confirm(`⚠️ 你還有 ${total - answered} 題未作答，確定要提交嗎？`);
+        if (!confirm) return;
+    }
+
+    state.submitted = true;
+    clearInterval(state.timerInterval);
+
+    // Calculate score
+    let correct = 0;
+    state.questions.forEach((q, i) => {
+        if (state.answers[i] === q.answer) correct++;
+    });
+    const wrong = total - correct;
+    const rate = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    // Hide quiz, show result
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'block';
+
+    // Score display
+    const scoreEl = document.getElementById('resultScore');
+    scoreEl.textContent = correct + '/' + total;
+    scoreEl.className = 'result-score ' + (rate >= 70 ? 'good' : rate >= 40 ? 'fair' : 'poor');
+
+    document.getElementById('statCorrect').textContent = correct;
+    document.getElementById('statWrong').textContent = wrong;
+    document.getElementById('statRate').textContent = rate + '%';
+
+    let grade = '';
+    if (rate >= 90) { grade = '🏆 表現優異！'; }
+    else if (rate >= 70) { grade = '👍 表現良好，繼續保持！'; }
+    else if (rate >= 50) { grade = '💪 再加把勁，多練幾次！'; }
+    else { grade = '📚 建議重新閱讀學習指引加強基礎'; }
+    document.getElementById('resultGrade').textContent = grade;
+
+    // Review
+    let reviewHtml = '';
+    state.questions.forEach((q, i) => {
+        const isCorrect = state.answers[i] === q.answer;
+        const userAns = state.answers[i] || '未作答';
+        const status = isCorrect ? 'correct' : 'wrong';
+        const keyPoint = q.key_point || '未提供';
+        const analysis = q.analysis || '未提供';
+
+        reviewHtml += `<div class="review-item ${status}">
+            <span class="review-status ${status}">${isCorrect ? '✅ 正確' : '❌ 錯誤'}</span>
+            <div class="review-q">${i+1}. ${q.question}</div>`;
+
+        q.options.forEach((opt, oi) => {
+            const letter = String.fromCharCode(65 + oi);
+            const text = opt.replace(/^[A-D]\.\s*/, '');
+            const isUserAns = state.answers[i] === letter;
+            const isCorrectAns = q.answer === letter;
+            let cls = '';
+            if (isCorrectAns) cls = ' style="color:#38a169;font-weight:600;"';
+            else if (isUserAns && !isCorrectAns) cls = ' style="color:#e53e3e;font-weight:600;"';
+            reviewHtml += `<div${cls}>${letter}. ${text}${isCorrectAns ? ' ← 正確答案' : ''}${isUserAns && !isCorrectAns ? ' ← 你的選擇' : ''}</div>`;
+        });
+
+        reviewHtml += `<div class="review-answer">你的答案: <span class="your-ans">${userAns}</span> | 正確答案: <span class="cor-ans">${q.answer}</span></div>
+            <div class="r-key-point">🔑 關鍵考點：${keyPoint}</div>
+            <div class="r-analysis">📝 解析：${analysis}</div>
+        </div>`;
+    });
+
+    document.getElementById('reviewContainer').innerHTML = reviewHtml;
+}
+
+// ===== Reset =====
+function resetQuiz() {
+    clearInterval(state.timerInterval);
+    state = {
+        questions: [],
+        currentIndex: 0,
+        answers: {},
+        timerInterval: null,
+        seconds: 0,
+        submitted: false,
+        scope: "all",
+        difficulty: "all"
+    };
+    document.getElementById('settingsPanel').style.display = 'block';
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'none';
+}
+
+// ===== Helpers =====
+function formatTime(sec) {
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return m + ':' + s;
+}
+
+// ===== Keyboard navigation =====
+document.addEventListener('keydown', (e) => {
+    if (state.questions.length === 0 || state.submitted) return;
+
+    if (e.key === 'ArrowLeft' && state.currentIndex > 0) {
+        goToQuestion(state.currentIndex - 1);
+    } else if (e.key === 'ArrowRight' && state.currentIndex < state.questions.length - 1) {
+        goToQuestion(state.currentIndex + 1);
+    } else if (['A','B','C','D'].includes(e.key.toUpperCase())) {
+        selectOption(state.currentIndex, e.key.toUpperCase());
+    }
+});
+updateScopeOptions();
+</script>
+</body>
+</html>

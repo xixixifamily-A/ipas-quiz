@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>IPAS 中級AI應用規劃師 - 題庫 5.1 數據準備與模型選擇</title>
+<style>
+body { font-family: 'Microsoft YaHei', 'Noto Sans TC', sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f7fafc; }
+h1 { color: #1a365d; border-bottom: 3px solid #2b6cb0; padding-bottom: 10px; }
+h2 { color: #2b6cb0; margin-top: 30px; }
+.difficulty-tag { display: inline-block; padding: 3px 12px; border-radius: 12px; font-size: 14px; font-weight: bold; margin: 5px 0; }
+.easy { background: #c6f6d5; color: #22543d; }
+.medium { background: #fefcbf; color: #744210; }
+.hard { background: #fed7d7; color: #742a2a; }
+.q-item { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.q-text { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+.q-opt { margin: 4px 0; padding: 4px 0; }
+.correct { color: #22543d; font-weight: bold; }
+.key-point { background: #ebf8ff; border-left: 4px solid #2b6cb0; padding: 10px; margin: 10px 0; }
+.analysis { background: #fffbeb; border-left: 4px solid #d69e2e; padding: 10px; margin: 10px 0; }
+</style>
+</head>
+<body>
+<h1>📘 IPAS 中級AI應用規劃師 - 科目1</h1>
+<h2>範圍 5.1: 數據準備與模型選擇</h2>
+<p>涵蓋資料前處理、特徵工程、模型選擇策略</p>
+<p>總題數: 15 題 (初級5題 + 中級5題 + 高級5題)</p>
+<h2><span class="difficulty-tag easy">初級</span> - 基礎概念理解</h2>
+<div class="q-item">
+<div class="q-text">5.1-E01. 特徵工程（Feature Engineering）的主要目的是什麼？</div>
+<div>A. 增加資料的儲存空間</div>
+<div class="correct">B. 將原始資料轉換為適合機器學習模型學習的格式與結構</div>
+<div>C. 刪除所有資料</div>
+<div>D. 美化圖表呈現</div>
+<div class="key-point">🔑 關鍵考點: 特徵工程定義</div>
+<div class="analysis">📝 解析: 特徵工程是將原始資料轉換為適合機器學習模型學習的格式與結構，目的是提高特徵對模型預測的貢獻度，是影響模型表現的關鍵步驟。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-E02. 在模型選擇時，應優先考慮哪些因素？</div>
+<div>A. 只看模型名稱是否流行</div>
+<div class="correct">B. 資料特性、任務類型、開發成本與可部署性</div>
+<div>C. 只考慮模型參數量越大越好</div>
+<div>D. 完全不需考慮任何因素</div>
+<div class="key-point">🔑 關鍵考點: 模型選擇考量因素</div>
+<div class="analysis">📝 解析: 模型選擇是技術落地前最具策略性的決策，需綜合考量資料特性（大小、品質）、任務類型（分類/回歸/生成）、開發成本與可部署性等，避免選型不當導致訓練耗時過長或部署困難。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-E03. 特徵標準化（如 Z-score 標準化）的主要目的是什麼？</div>
+<div>A. 刪除異常值</div>
+<div class="correct">B. 使不同尺度的特徵具有相同的量綱，避免數值範圍大的特徵主導模型</div>
+<div>C. 增加資料筆數</div>
+<div>D. 將類別資料轉為數值</div>
+<div class="key-point">🔑 關鍵考點: 特徵標準化目的</div>
+<div class="analysis">📝 解析: 特徵標準化（如Z-score標準化）將不同尺度的特徵轉換到相同量綱，避免數值範圍大的特徵主導模型訓練過程，對SVM、KNN、神經網路等演算法尤其重要。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-E04. AutoML 在特徵工程中的主要優勢是什麼？</div>
+<div>A. 完全不需要資料</div>
+<div class="correct">B. 自動化執行特徵選擇、特徵生成與特徵交互作用檢測，提高效率</div>
+<div>C. 只會讓模型更差</div>
+<div>D. 無法處理大型資料集</div>
+<div class="key-point">🔑 關鍵考點: AutoML在特徵工程的優勢</div>
+<div class="analysis">📝 解析: AutoML工具（如Google AutoML、H2O.ai、AutoKeras）可自動化特徵工程流程，包括特徵選擇、多項式特徵生成、特徵交互作用檢測等，大幅提高開發效率。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-E05. 在資料前處理中，處理遺失值（Missing Value）的常見方法不包括下列何者？</div>
+<div>A. 刪除含遺失值的資料列</div>
+<div>B. 以平均值或中位數填補</div>
+<div class="correct">C. 完全忽略遺失值不做任何處理</div>
+<div>D. 使用預測模型填補</div>
+<div class="key-point">🔑 關鍵考點: 遺失值處理方法</div>
+<div class="analysis">📝 解析: 遺失值處理常見方法包括：刪除含遺失值的資料列、以平均值/中位數/眾數填補、使用預測模型填補等。完全忽略遺失值可能導致模型訓練錯誤或偏差。</div>
+</div>
+<h2><span class="difficulty-tag medium">中級</span> - 技術應用與分析</h2>
+<div class="q-item">
+<div class="q-text">5.1-M01. 在分類任務中，若類別資料嚴重不平衡（如詐騙偵測：正常交易99%，詐騙1%），下列哪一種處理方式最為適當？</div>
+<div>A. 直接使用原始資料訓練即可</div>
+<div class="correct">B. 採用過採樣（如SMOTE）、欠採樣或調整類別權重等方式處理不平衡問題</div>
+<div>C. 刪除多數類別的所有資料</div>
+<div>D. 將類別問題轉為回歸問題</div>
+<div class="key-point">🔑 關鍵考點: 類別不平衡處理</div>
+<div class="analysis">📝 解析: 類別不平衡會導致模型偏向多數類別。常見處理方式包括：過採樣（如SMOTE合成少數類樣本）、欠採樣（隨機刪除多數類樣本）、調整類別權重等。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-M02. 下列何者不是特徵選擇（Feature Selection）的常見方法？</div>
+<div>A. 過濾法（Filter Method）- 根據統計指標篩選</div>
+<div>B. 包裝法（Wrapper Method）- 根據模型表現選擇</div>
+<div class="correct">C. 隨機選擇法 - 隨機挑選特徵</div>
+<div>D. 嵌入法（Embedded Method）- 在模型訓練中自動選擇</div>
+<div class="key-point">🔑 關鍵考點: 特徵選擇方法</div>
+<div class="analysis">📝 解析: 特徵選擇的三大類方法為：過濾法（根據統計指標如相關係數）、包裝法（根據模型表現反覆評估）、嵌入法（在模型訓練中自動進行特徵選擇，如Lasso回歸）。隨機選擇並非標準方法。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-M03. 當模型在訓練資料上表現很好，但在測試資料上表現很差，此現象稱為？可透過哪些方式改善？</div>
+<div>A. 欠擬合（Underfitting），增加模型複雜度</div>
+<div class="correct">B. 過擬合（Overfitting），可透過正則化、增加訓練資料、降低模型複雜度等方式改善</div>
+<div>C. 梯度爆炸，降低學習率</div>
+<div>D. 正常現象，不需要處理</div>
+<div class="key-point">🔑 關鍵考點: 過擬合與改善方法</div>
+<div class="analysis">📝 解析: 過擬合（Overfitting）指模型過度學習訓練資料的雜訊和細節，導致泛化能力下降。改善方法包括：正則化（L1/L2）、增加訓練資料量、降低模型複雜度、交叉驗證、Early Stopping等。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-M04. 對於時間序列預測任務，在進行資料分割（Train/Test Split）時應注意什麼？</div>
+<div>A. 隨機分割即可</div>
+<div class="correct">B. 應依時間順序分割，避免使用未來資料預測過去（資料洩漏）</div>
+<div>C. 全部作為訓練資料</div>
+<div>D. 全部作為測試資料</div>
+<div class="key-point">🔑 關鍵考點: 時間序列資料分割</div>
+<div class="analysis">📝 解析: 時間序列資料具有時間依賴性，應依時間順序進行分割（前段訓練、後段測試），不能隨機分割。否則會造成資料洩漏（Data Leakage），使用未來資訊預測過去。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-M05. 在特徵工程中，將類別型特徵（如顏色：紅、黃、藍）轉換為數值型特徵時，最常見且避免錯誤關係假設的方法是什麼？</div>
+<div>A. 直接編號為1, 2, 3</div>
+<div class="correct">B. One-hot Encoding（獨熱編碼）</div>
+<div>C. 隨機分配數值</div>
+<div>D. 直接刪除類別特徵</div>
+<div class="key-point">🔑 關鍵考點: 類別特徵編碼</div>
+<div class="analysis">📝 解析: One-hot Encoding將每個類別值轉換為獨立二元特徵，避免直接編號（如1,2,3）造成模型誤解類別間有順序關係。例如紅色→[1,0,0]、黃色→[0,1,0]、藍色→[0,0,1]。</div>
+</div>
+<h2><span class="difficulty-tag hard">高級</span> - 綜合應用與評估</h2>
+<div class="q-item">
+<div class="q-text">5.1-H01. 某電商平台欲建立推薦系統，資料包含用戶瀏覽紀錄（稀疏矩陣）、商品描述（文字）、用戶評分（數值）。下列哪種特工程作順序最合理？</div>
+<div>A. 先訓練模型再處理資料</div>
+<div class="correct">B. 資料清理→文字特徵提取（TF-IDF/Embedding）→數值特徵標準化→特徵整合→特徵選擇</div>
+<div>C. 直接將所有資料輸入模型</div>
+<div>D. 先標準化再清理資料</div>
+<div class="key-point">🔑 關鍵考點: 多源資料特徵工程流程</div>
+<div class="analysis">📝 解析: 合理的特徵工程流程為：先進行資料清理（處理遺失值/異常值）→各類型特徵分別處理（文字用TF-IDF或Embedding、數值用標準化）→將不同來源特徵整合→最後進行特徵選擇，以確保資料品質。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-H02. 在選擇影像分類模型時，若訓練資料僅有1萬張標註圖片，但需辨識100個類別，且部署環境為邊緣裝置（Edge Device），下列哪種策略最適合？</div>
+<div>A. 直接訓練一個100層的CNN</div>
+<div class="correct">B. 使用遷移學習（Transfer Learning），選用輕量化預訓練模型（如MobileNet）進行微調</div>
+<div>C. 使用隨機森林</div>
+<div>D. 不使用任何預訓練模型</div>
+<div class="key-point">🔑 關鍵考點: 遷移學習與模型選擇策略</div>
+<div class="analysis">📝 解析: 資料量有限且需部署於邊緣裝置時，最適合策略為遷移學習搭配輕量化模型（如MobileNet）。預訓練模型已學習通用影像特徵，只需微調即可，且輕量化架構適合邊緣部署。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-H03. 在模型選擇過程中，若發現線性回歸模型的表現不佳，而資料可能具有非線性關係，應如何調整模型選擇策略？</div>
+<div>A. 繼續使用線性回歸並增加迭代次數</div>
+<div class="correct">B. 改用能處理非線性關係的模型（如隨機森林、XGBoost、神經網路），並進行特徵非線性轉換</div>
+<div>C. 減少訓練資料量</div>
+<div>D. 降低模型評估標準</div>
+<div class="key-point">🔑 關鍵考點: 非線性問題模型選擇</div>
+<div class="analysis">📝 解析: 當資料存在非線性關係時，應改用能捕捉非線性模式的模型（如樹模型、神經網路），或透過特徵非線性轉換（如多項式特徵）來提升線性模型表現。繼續使用線性模型無法解決根本問題。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-H04. 在資料準備階段，若發現訓練資料與實際應用場景的資料分布存在顯著差異（即訓練/推論分布不一致），下列何種處理方式最不恰當？</div>
+<div>A. 進行資料偏移檢測與分析</div>
+<div class="correct">B. 假設模型可以自動泛化，不做任何處理直接使用</div>
+<div>C. 收集更多與推論場景相似的訓練資料</div>
+<div>D. 使用領域適應（Domain Adaptation）技術調整模型</div>
+<div class="key-point">🔑 關鍵考點: 訓練推論分布不一致處理</div>
+<div class="analysis">📝 解析: 訓練與推論資料分布不一致（Covariate Shift）會嚴重影響模型泛化能力。應進行資料偏移分析，收集更多目標場景資料，或使用領域適應技術。忽略此問題可能導致模型在實際應用中效能大幅下降。</div>
+</div>
+<div class="q-item">
+<div class="q-text">5.1-H05. 在處理高維度稀疏資料（如文本分類的BoW特徵矩陣）時，下列哪種特徵處理方式最為關鍵？</div>
+<div>A. 不做任何處理</div>
+<div class="correct">B. 維度縮減（如PCA、Truncated SVD）或使用稀疏感知模型，搭配特徵選擇降低維度</div>
+<div>C. 增加更多特徵</div>
+<div>D. 使用密集矩陣儲存</div>
+<div class="key-point">🔑 關鍵考點: 高維稀疏資料處理</div>
+<div class="analysis">📝 解析: 高維稀疏資料（如BoW/TF-IDF矩陣）會導致維度災難與計算效率問題。應透過維度縮減（如Truncated SVD、LSA）或特徵選擇降低維度，並選用能有效處理稀疏資料的模型（如線性SVM、LightGBM）。</div>
+</div>
+</body></html>

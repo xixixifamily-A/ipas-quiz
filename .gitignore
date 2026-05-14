@@ -1,0 +1,13 @@
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary / generated txt extracts
+subject1_full.txt
+subject2_full.txt
+subject3_full.txt
+
+# Old small question banks (replaced by v2.0)
+qbank_all_135_data.js
+qbank_subject2_78_data.js
+qbank_subject3_78_data.js
